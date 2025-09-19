@@ -1,0 +1,53 @@
+# Shai-Hulud Vulnerability Scanner Configuration
+# This file defines the patterns and rules for detecting Shai-Hulud vulnerabilities
+
+# Critical vulnerability patterns
+patterns:
+  hardcoded_secrets:
+    - "shai-hulud.*secret"
+    - "arrakis.*secret"
+    - "spice.*api.*key"
+    - "MELANGE_[A-Z_]+.*=.*['\"][^'\"]+['\"]"
+  
+  sql_injection:
+    - "sandworm.*sql"
+    - "SELECT.*FROM.*sandworm"
+    - "\\$\\{.*location.*\\}"
+  
+  api_exposure:
+    - "api_key.*shai"
+    - "SPICE_API_KEY"
+    - "Bearer.*hulud"
+
+# Severity levels
+severity:
+  critical:
+    - "shai-hulud.*arrakis.*secret"
+    - "api_key.*SPICE_API_KEY"
+  high:
+    - "shai-hulud"
+    - "Shai-Hulud"
+    - "SHAI-HULUD"
+  medium:
+    - "spice.*monitoring"
+    - "sandworm.*tracking"
+
+# File exclusions (files to skip during scanning)
+exclusions:
+  directories:
+    - ".git"
+    - "node_modules"
+    - "dist"
+    - "build"
+  files:
+    - "*.min.js"
+    - "*.map"
+    - "package-lock.json"
+
+# Scanner behavior
+scanner:
+  fail_on_critical: true
+  fail_on_high: true
+  fail_on_medium: false
+  case_sensitive: false
+  regex_enabled: true

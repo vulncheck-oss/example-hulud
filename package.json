@@ -1,0 +1,22 @@
+{
+  "name": "example-hulud",
+  "version": "1.0.0",
+  "description": "Example repository demonstrating Shai-Hulud vulnerability detection",
+  "main": "vulnerable-app.js",
+  "scripts": {
+    "start": "node vulnerable-app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "security",
+    "vulnerability",
+    "demo",
+    "shai-hulud",
+    "dune"
+  ],
+  "author": "VulnCheck",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}

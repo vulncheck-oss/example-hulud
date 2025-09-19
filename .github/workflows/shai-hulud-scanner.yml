@@ -1,0 +1,78 @@
+name: Shai-Hulud Vulnerability Scanner
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  scan-for-shai-hulud:
+    runs-on: ubuntu-latest
+    name: Scan for Shai-Hulud vulnerabilities
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up CLI scanner
+      run: |
+        # Create a simple CLI scanner script for Shai-Hulud vulnerabilities
+        cat > shai-hulud-scanner.sh << 'EOF'
+        #!/bin/bash
+        
+        echo "🏜️  Scanning for Shai-Hulud vulnerabilities..."
+        echo "The spice must flow, but vulnerabilities must not!"
+        echo ""
+        
+        # Define vulnerability patterns to search for
+        VULN_PATTERNS=(
+          "shai-hulud"
+          "Shai-Hulud"
+          "SHAI-HULUD"
+          "spice.*api.*key"
+          "sandworm.*sql"
+          "arrakis.*secret"
+        )
+        
+        FOUND_VULNS=0
+        
+        # Scan all files except git directory
+        for pattern in "${VULN_PATTERNS[@]}"; do
+          echo "🔍 Searching for pattern: $pattern"
+          
+          # Use grep to find matches, excluding .git directory
+          matches=$(grep -r -i --exclude-dir=.git --exclude-dir=node_modules "$pattern" . || true)
+          
+          if [ ! -z "$matches" ]; then
+            echo "⚠️  VULNERABILITY FOUND: Pattern '$pattern' detected!"
+            echo "$matches"
+            echo ""
+            FOUND_VULNS=$((FOUND_VULNS + 1))
+          fi
+        done
+        
+        if [ $FOUND_VULNS -gt 0 ]; then
+          echo "🚨 CRITICAL: $FOUND_VULNS Shai-Hulud vulnerability pattern(s) detected!"
+          echo "The great sandworm has sensed the vulnerability in your code!"
+          echo "🐛 Fix these vulnerabilities before the spice can flow safely."
+          exit 1
+        else
+          echo "✅ No Shai-Hulud vulnerabilities detected. The spice flows safely!"
+          exit 0
+        fi
+        EOF
+        
+        chmod +x shai-hulud-scanner.sh
+        
+    - name: Run Shai-Hulud vulnerability scan
+      run: ./shai-hulud-scanner.sh
+      
+    - name: Report scan results
+      if: failure()
+      run: |
+        echo "💀 SCAN FAILED: Shai-Hulud vulnerabilities were detected!"
+        echo "This PR cannot be merged until the vulnerabilities are fixed."
+        echo ""
+        echo "🏜️  The sandworms of Arrakis have detected security flaws in your code."
+        echo "Remove all Shai-Hulud vulnerability patterns before proceeding."
