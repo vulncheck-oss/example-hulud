@@ -1,0 +1,19 @@
+name: Scan with VulnCheck
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions: write-all
+
+jobs:
+  scan:
+    name: Scan with VulnCheck
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: vulncheck-oss/action@v1.1.3
+      with:
+        command: scan
+        token: ${{ secrets.VC_TOKEN }}
